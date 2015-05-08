@@ -1,5 +1,8 @@
 <?php
 
+use App\School\Lesson\Commands\BookLesson;
+use App\School\Lesson\LessonId;
+use App\School\ReadModels\Lesson;
 use Illuminate\Foundation\Bus\DispatchesCommands;
 
 class CQRSTest extends TestCase {
@@ -19,6 +22,7 @@ class CQRSTest extends TestCase {
 		$command = new BookLesson($lessonId, $clientName);
 		$this->dispatch($command);
 
+		$this->assertNotNull(Lesson::find($testLessonId));
 		$this->assertEquals( Lesson::find($testLessonId)->clientName, $clientName );
 	}
 }
