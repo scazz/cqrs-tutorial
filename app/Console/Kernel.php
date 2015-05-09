@@ -12,6 +12,8 @@ class Kernel extends ConsoleKernel {
 	 */
 	protected $commands = [
 		'App\Console\Commands\Inspire',
+		'App\CQRS\EloquentEventStore\CreateEloquentEventStore',
+		'App\CQRS\EloquentEventStore\DropEloquentEventStore'
 	];
 
 	/**
