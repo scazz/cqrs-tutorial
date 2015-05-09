@@ -24,6 +24,6 @@ class LessonWasOpened implements SerializableEvent {
 
 	public function serialize()
 	{
-		return array( 'lessonId'=> $this->getLessonId() );
+		return array( 'lessonId'=> (string) $this->getLessonId() );
 	}
 }
