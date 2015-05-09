@@ -2,6 +2,7 @@
 namespace App\School\Lesson\Commands;
 
 use App\Commands\Command;
+use App\School\Lesson\Lesson;
 use App\School\Lesson\LessonId;
 use Illuminate\Contracts\Bus\SelfHandling;
 
@@ -25,6 +26,6 @@ class BookLesson extends Command implements SelfHandling {
 
 	public function handle()
 	{
-		//TODO: handle dispatched command
+		Lesson::bookClientOntoNewLesson($this->lessonId, "");
 	}
 }

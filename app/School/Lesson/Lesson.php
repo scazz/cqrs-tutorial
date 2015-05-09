@@ -3,11 +3,20 @@
 
 namespace App\School\Lesson;
 
-class Lesson {
+use App\CQRS\EventSourcedEntity;
+use App\School\Lesson\Events\ClientBookedOntoLesson;
+use App\School\Lesson\Events\LessonWasOpened;
+use App\School\Lesson\Exceptions\TooManyClientsAddedToLesson;
 
-	private $lessonId;
+class Lesson extends EventSourcedEntity {
+
+	protected $lessonId;
 	private $numberOfClients;
-	private $uncommittedEvents = [];
+
+	public function getEntityId()
+	{
+		return $this->lessonId;
+	}
 
 	public static function bookClientOntoNewLesson(LessonId $lessonId, $clientName) {
 		$lesson = new Lesson();
@@ -19,24 +28,24 @@ class Lesson {
 
 	private function openLesson( LessonId $lessonId ) {
 		/* here we would check any invarients - but we don't have any to protect, so we can just generate the events */
-		$event = new LessonWasOpened( $lessonId);
-		$this->applyLessonWasOpened($event);
-		$this->uncommittedEvents[] = DomainEventMessage::recordNow( $this->lessonId, $event );
+		$this->apply(
+			new LessonWasOpened( $lessonId)
+		);
 	}
 
-	private function applyLessonWasOpened( $event ) {
-		$this->lessonId = $event->lessonId;
+	protected function applyLessonWasOpened( LessonWasOpened $event ) {
+		$this->lessonId = $event->getLessonId();
 		$this->numberOfClients = 0;
 	}
 
 	public function bookClient( $clientName ) {
 		if ($this->numberOfClients >= 3) {
-			throw new Exception("Too many clients");
+			throw new TooManyClientsAddedToLesson();
 		}
 
-		$event = new ClientBookedOntoLesson( $this->lessonId, $clientName);
-		$this->applyClientBookedOntoLesson( $event );
-		$this->uncommittedEvents[] = DomainEventMessage::recordNow( $this->lessonId, $event );
+		$this->apply(
+			new ClientBookedOntoLesson( $this->lessonId, $clientName)
+		);
 	}
 
 	/*
@@ -47,7 +56,9 @@ class Lesson {
 	 * we would need to keep a track of client names.
 	 */
 
-	private function applyClientBookedOntoLesson( $event ) {
+	protected function applyClientBookedOntoLesson( ClientBookedOntoLesson $event ) {
 		$this->numberOfClients++;
 	}
-} 
+
+
+}
