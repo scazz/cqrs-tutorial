@@ -4,6 +4,7 @@ namespace App\School\Lesson\Commands;
 use App\Commands\Command;
 use App\School\Lesson\Lesson;
 use App\School\Lesson\LessonId;
+use App\School\Lesson\LessonRepository;
 use Illuminate\Contracts\Bus\SelfHandling;
 
 class BookLesson extends Command implements SelfHandling {
@@ -24,8 +25,10 @@ class BookLesson extends Command implements SelfHandling {
 		return $this->lessonId;
 	}
 
-	public function handle()
+	public function handle(LessonRepository $lessonRepository)
 	{
-		Lesson::bookClientOntoNewLesson($this->lessonId, "");
+		$lesson = Lesson::bookClientOntoNewLesson($this->lessonId, "");
+
+		$lessonRepository->save($lesson);
 	}
 }

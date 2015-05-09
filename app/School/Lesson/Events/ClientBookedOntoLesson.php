@@ -1,9 +1,10 @@
 <?php
 namespace App\School\Lesson\Events;
 
+use App\CQRS\Serializer\SerializableEvent;
 use App\School\Lesson\LessonId;
 
-class ClientBookedOntoLesson {
+class ClientBookedOntoLesson implements SerializableEvent {
 	/**
 	 * @var LessonId
 	 */
@@ -14,4 +15,11 @@ class ClientBookedOntoLesson {
 		$this->lessonId = $lessonId;
 		$this->clientName = $clientName;
 	}
-} 
+
+	public function serialize()
+	{
+		return array(
+			'clientName' => $this->clientName
+		);
+	}
+}

@@ -25,7 +25,7 @@ class DomainEventMessage {
 	/**
 	 * @return DateTime
 	 */
-	public function getDateTime()
+	public function getRecordedAt()
 	{
 		return $this->dateTime;
 	}
