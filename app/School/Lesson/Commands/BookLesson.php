@@ -11,10 +11,15 @@ class BookLesson extends Command implements SelfHandling {
 
 	/** @var LessonId  */
 	private $lessonId;
+	/**
+	 * @var
+	 */
+	private $clientName;
 
-	public function __construct(LessonId $lessonId)
+	public function __construct(LessonId $lessonId, $clientName)
 	{
 		$this->lessonId = $lessonId;
+		$this->clientName = $clientName;
 	}
 
 	/**
@@ -27,7 +32,7 @@ class BookLesson extends Command implements SelfHandling {
 
 	public function handle(LessonRepository $lessonRepository)
 	{
-		$lesson = Lesson::bookClientOntoNewLesson($this->lessonId, "");
+		$lesson = Lesson::bookClientOntoNewLesson($this->lessonId, $this->clientName);
 
 		$lessonRepository->save($lesson);
 	}
