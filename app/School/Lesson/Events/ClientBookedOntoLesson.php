@@ -22,4 +22,20 @@ class ClientBookedOntoLesson implements SerializableEvent {
 			'clientName' => $this->clientName
 		);
 	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getClientName()
+	{
+		return $this->clientName;
+	}
+
+	/**
+	 * @return LessonId
+	 */
+	public function getLessonId()
+	{
+		return $this->lessonId;
+	}
 }
