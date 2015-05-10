@@ -2,6 +2,7 @@
 
 use App\School\Lesson\Commands\BookClientOntoLesson;
 use App\School\Lesson\Commands\BookLesson;
+use App\School\Lesson\Exceptions\TooManyClientsAddedToLesson;
 use App\School\Lesson\LessonId;
 use App\School\ReadModels\Lesson;
 use Illuminate\Database\Eloquent\Collection;
@@ -57,5 +58,16 @@ class CQRSTest extends TestCase {
 		}
 
 		$this->assertTrue( in_array($nameToFind, $attributeArray), "Could not find client named: ${nameToFind}" );
+	}
+
+	public function testMoreThan3ClientsCannotBeAddedToALesson() {
+		$testLessonId = '123e4567-e89b-12d3-a456-426655440002';
+		$lessonId = new LessonId($testLessonId);
+		$this->dispatch( new BookLesson($lessonId, "bob") );
+		$this->dispatch( new BookClientOntoLesson($lessonId, "george") );
+		$this->dispatch( new BookClientOntoLesson($lessonId, "fred") );
+
+		$this->setExpectedException( TooManyClientsAddedToLesson::class );
+		$this->dispatch( new BookClientOntoLesson($lessonId, "emma") );
 	}
 }
