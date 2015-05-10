@@ -2,6 +2,7 @@
 namespace App\School\Lesson\Events;
 
 use App\CQRS\Serializer\SerializableEvent;
+use App\School\Lesson\Lesson;
 use App\School\Lesson\LessonId;
 
 class LessonWasOpened implements SerializableEvent {
@@ -25,5 +26,10 @@ class LessonWasOpened implements SerializableEvent {
 	public function serialize()
 	{
 		return array( 'lessonId'=> (string) $this->getLessonId() );
+	}
+
+	public static function deserialize($data) {
+		$lessonId = new LessonId($data->lessonId);
+		return new self($lessonId);
 	}
 }

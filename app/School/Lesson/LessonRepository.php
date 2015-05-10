@@ -20,4 +20,11 @@ class LessonRepository {
 			Event::fire($domainEventMessage->getEvent());
 		}
 	}
+
+	public function load(LessonId $id) {
+		$events = $this->eventStoreRepository->load($id);
+		$lesson = new Lesson();
+		$lesson->initializeState($events);
+		return $lesson;
+	}
 }

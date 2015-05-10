@@ -12,4 +12,11 @@ class EventSerializer {
 			'payload' => $event->serialize()
 		);
 	}
+
+	public function deserialize( $serializedEvent ) {
+		$eventClass = $serializedEvent->class;
+		$eventPayload = $serializedEvent->payload;
+
+		return $eventClass::deserialize($eventPayload);
+	}
 } 

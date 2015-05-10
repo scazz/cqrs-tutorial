@@ -25,8 +25,7 @@ class Lesson extends EventSourcedEntity {
 		return $lesson;
 	}
 
-
-	private function openLesson( LessonId $lessonId ) {
+	public function openLesson( LessonId $lessonId ) {
 		/* here we would check any invarients - but we don't have any to protect, so we can just generate the events */
 		$this->apply(
 			new LessonWasOpened( $lessonId)

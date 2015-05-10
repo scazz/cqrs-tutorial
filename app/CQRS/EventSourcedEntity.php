@@ -11,6 +11,12 @@ abstract class EventSourcedEntity implements EventSourcedEntityInterface {
 		$this->uncommittedEvents[] = DomainEventMessage::recordNow( $this->getEntityId(), $event );
 	}
 
+	public function initializeState($events) {
+		foreach( $events as $event ) {
+			$this->handle($event);
+		}
+	}
+
 	public function getUncommittedDomainEvents()
 	{
 		return $this->uncommittedEvents;

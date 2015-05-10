@@ -19,8 +19,15 @@ class ClientBookedOntoLesson implements SerializableEvent {
 	public function serialize()
 	{
 		return array(
+			'lessonId' => (string) $this->lessonId,
 			'clientName' => $this->clientName
 		);
+	}
+
+	public static function deserialize($data)
+	{
+		$lessonId = new LessonId($data->lessonId);
+		return new self( $lessonId, $data->clientName );
 	}
 
 	/**
@@ -38,4 +45,6 @@ class ClientBookedOntoLesson implements SerializableEvent {
 	{
 		return $this->lessonId;
 	}
+
+
 }
