@@ -1,5 +1,6 @@
 <?php namespace App\Providers;
 
+use App\School\Client\Projections\ClientProjector;
 use App\School\Lesson\Projections\LessonProjector;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -28,6 +29,7 @@ class EventServiceProvider extends ServiceProvider {
 	{
 		parent::boot($events);
 		Event::subscribe( new LessonProjector() );
+		Event::subscribe( new ClientProjector() );
 	}
 
 }

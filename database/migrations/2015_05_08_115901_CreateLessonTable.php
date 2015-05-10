@@ -25,7 +25,7 @@ class CreateLessonTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('lesson');
+		Schema::drop('lessons');
 	}
 
 }

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddClientNameToLessonsTable extends Migration {
+class CreateClientsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,9 +12,11 @@ class AddClientNameToLessonsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('lessons', function(Blueprint $table)
+		Schema::create('clients', function(Blueprint $table)
 		{
-			$table->string("clientName");
+			$table->increments('id');
+			$table->string('lesson_id');
+			$table->string('name');
 		});
 	}
 
@@ -25,10 +27,7 @@ class AddClientNameToLessonsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('lessons', function(Blueprint $table)
-		{
-			$table->dropColumn('clientName');
-		});
+		Schema::drop('clients');
 	}
 
 }

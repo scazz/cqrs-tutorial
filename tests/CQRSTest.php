@@ -22,7 +22,10 @@ class CQRSTest extends TestCase {
 		$command = new BookLesson($lessonId, $clientName);
 		$this->dispatch($command);
 
-		$this->assertNotNull(Lesson::find($testLessonId));
-		$this->assertEquals( Lesson::find($testLessonId)->clientName, $clientName );
+		$lesson =  Lesson::find($testLessonId);
+		$this->assertEquals( $lesson->id, $testLessonId );
+
+		$client = $lesson->clients()->first();
+		$this->assertEquals($client->name, $clientName);
 	}
 }
