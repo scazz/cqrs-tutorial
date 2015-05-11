@@ -18,15 +18,14 @@ class CQRSTest extends TestCase {
 	 */
 	public function testFiringEventUpdatesReadModel()
 	{
-		$testLessonId = '123e4567-e89b-12d3-a456-426655440000';
+		$lessonId = new LessonId( (string) \Rhumsaa\Uuid\Uuid::uuid1() );
 		$clientName = "George";
-		$lessonId = new LessonId($testLessonId);
 
 		$command = new BookLesson($lessonId, $clientName);
 		$this->dispatch($command);
 
-		$lesson =  Lesson::find($testLessonId);
-		$this->assertEquals( $lesson->id, $testLessonId );
+		$lesson =  Lesson::find( (string) $lessonId);
+		$this->assertEquals( $lesson->id, (string) $lessonId );
 
 		$client = $lesson->clients()->first();
 		$this->assertEquals($client->name, $clientName);
@@ -34,8 +33,7 @@ class CQRSTest extends TestCase {
 
 	public function testLoadingWriteModel()
 	{
-		$testLessonId = '123e4567-e89b-12d3-a456-426655440001';
-		$lessonId = new LessonId($testLessonId);
+		$lessonId = new LessonId( (string) \Rhumsaa\Uuid\Uuid::uuid1() );
 		$clientName_1 = "George";
 		$clientName_2 = "Fred";
 
@@ -45,7 +43,7 @@ class CQRSTest extends TestCase {
 		$command = new BookClientOntoLesson($lessonId, $clientName_2);
 		$this->dispatch($command);
 
-		$lesson =  Lesson::find($testLessonId);
+		$lesson =  Lesson::find( (string) $lessonId );
 		$this->assertClientCollectionContains($lesson->clients, $clientName_1);
 		$this->assertClientCollectionContains($lesson->clients, $clientName_2);
 	}
@@ -61,13 +59,18 @@ class CQRSTest extends TestCase {
 	}
 
 	public function testMoreThan3ClientsCannotBeAddedToALesson() {
-		$testLessonId = '123e4567-e89b-12d3-a456-426655440002';
-		$lessonId = new LessonId($testLessonId);
+		$lessonId = new LessonId( (string) \Rhumsaa\Uuid\Uuid::uuid1() );
 		$this->dispatch( new BookLesson($lessonId, "bob") );
 		$this->dispatch( new BookClientOntoLesson($lessonId, "george") );
 		$this->dispatch( new BookClientOntoLesson($lessonId, "fred") );
 
 		$this->setExpectedException( TooManyClientsAddedToLesson::class );
 		$this->dispatch( new BookClientOntoLesson($lessonId, "emma") );
+	}
+
+	public function testEntityCreationWithUUIDGenerator() {
+		$lessonId = new LessonId( (string) \Rhumsaa\Uuid\Uuid::uuid1() );
+		$this->dispatch( new BookLesson($lessonId, "bob") );
+		$this->assertInstanceOf( Lesson::class, Lesson::find( (string) $lessonId)  );
 	}
 }
