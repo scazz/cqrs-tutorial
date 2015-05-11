@@ -1,9 +1,9 @@
 <?php
 namespace App\School\ReadModels;
 
-use Illuminate\Database\Eloquent\Model;
+use App\CQRS\ReadModel\ImmutableModel;
 
-class Lesson extends Model {
+class Lesson extends ImmutableModel {
 
 	public function clients() {
 		return $this->hasMany(Client::class);

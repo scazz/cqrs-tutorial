@@ -1,13 +1,8 @@
 <?php
-
-
 namespace App\School\ReadModels;
 
+use App\CQRS\ReadModel\ImmutableModel;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Client extends Model {
-
-
+class Client extends ImmutableModel {
 
 } 
